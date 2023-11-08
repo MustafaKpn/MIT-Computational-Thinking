@@ -101,8 +101,29 @@ def brute_force_cow_transport(cows,limit=10):
     transported on a particular trip and the overall list containing all the
     trips
     """
-    # TODO: Your code here
-    pass
+    cows_list = get_partitions(list(cows.keys()))
+    def weight_check(cows_list, limit):
+        check = True
+        for i in cows_list:
+            weight = 0
+            for x in i:
+                weight += cows[x]
+            if weight > limit:
+                check = False
+                break
+        if check == True:
+            return cows_list
+    solutions = []
+    for i in cows_list:
+        status = weight_check(i, limit)
+        if type(status) == list:
+            solutions.append(status)
+    min = 10
+    for i in solutions:
+        if len(i) < min:
+            min = len(i)
+            solution = i
+    return solution
 
         
 # Problem 3
@@ -119,8 +140,24 @@ def compare_cow_transport_algorithms():
     Returns:
     Does not return anything.
     """
-    # TODO: Your code here
-    pass
+    import time
+    cows = load_cows("ps1_cow_data.txt")
+    limit=100
+    gready_time1 = time.time()
+    greedy_cow_transport(cows, limit)
+    gready_time2 = time.time()
+    comp1 = gready_time2 - gready_time1
+
+
+    brute_time1 = time.time()
+    brute_force_cow_transport(cows, limit)
+    brute_time2 = time.time()
+    comp2 = brute_time2 - brute_time1
+
+    if comp1 > comp2:
+        print('The brute force algorithm is faster')
+    elif comp2 > comp1:
+        print('The gready algorithm is faster')
 
 
 """
